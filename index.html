@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои сообщения</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .messages-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .user-info {
+            background-color: #e0f7e9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-info h2 {
+            margin: 0;
+            color: #0a2463;
+        }
+        
+        .logout-btn {
+            background-color: #ffccd6;
+            color: #0a2463;
+            border: 2px solid #ff99aa;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .logout-btn:hover {
+            background-color: #ffb6c1;
+        }
+        
+        .messages-list {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(10, 36, 99, 0.1);
+        }
+        
+        .message-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4a90e2;
+            background-color: #f8f9fa;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .message-sender {
+            font-weight: bold;
+            color: #0a2463;
+        }
+        
+        .message-time {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .message-content {
+            color: #333;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container messages-container">
+        <!-- Информация о пользователе -->
+        <div class="user-info">
+            <h2 id="userGreeting">Мои сообщения</h2>
+            <button class="logout-btn" onclick="logout()">Выйти</button>
+        </div>
+        
+        <!-- Список сообщений -->
+        <div class="messages-list">
+            <h3 style="color: #0a2463; margin-bottom: 20px;">Последние сообщения</h3>
+            
+            <div class="message-item">
+                <div class="message-header">
+                    <span class="message-sender">Администратор</span>
+                    <span class="message-time">Сегодня, 10:30</span>
+                </div>
+                <div class="message-content">
+                    Добро пожаловать в систему! Ваш вход выполнен успешно.
+                </div>
+            </div>
+            
+            <div class="message-item">
+                <div class="message-header">
+                    <span class="message-sender">Система</span>
+                    <span class="message-time">Вчера, 14:45</span>
+                </div>
+                <div class="message-content">
+                    Не забудьте сменить пароль при первом входе в систему.
+                </div>
+            </div>
+            
+            <div class="message-item">
+                <div class="message-header">
+                    <span class="message-sender">Поддержка</span>
+                    <span class="message-time">15 мая 2024</span>
+                </div>
+                <div class="message-content">
+                    Новое обновление системы запланировано на следующую неделю.
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="index.html" style="color: #1e88e5; text-decoration: underline;">
+                ← Вернуться к форме входа
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // Проверка авторизации
+        function checkAuth() {
+            const authToken = localStorage.getItem('auth_token');
+            const currentUser = localStorage.getItem('current_user');
+            
+            if (!authToken || !currentUser) {
+                // Не авторизован - редирект на форму входа
+                window.location.href = 'index.html';
+                return null;
+            }
+            
+            return currentUser;
+        }
+        
+        // Выход из системы
+        function logout() {
+            // Удаляем данные авторизации
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('current_user');
+            
+            // Редирект на форму входа
+            window.location.href = 'index.html';
+        }
+        
+        // Загрузка страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = checkAuth();
+            
+            if (user) {
+                // Показываем приветствие
+                document.getElementById('userGreeting').textContent = 
+                    `Добро пожаловать, ${user}!`;
+            }
+        });
+        
+        // Дополнительная защита
+        window.onload = function() {
+            if (!localStorage.getItem('auth_token')) {
+                // Показываем сообщение об ошибке
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 100);
+            }
+        };
+    </script>
+</body>
+</html>
